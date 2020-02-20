@@ -1,7 +1,8 @@
 const socket = io();//zainicjuj nowego klienta socketowego i zachowaj referencje do niego pod stałą socket
 //socket.on('message', (event) => addMessage(event.author, event.content))
-socket.on('message', ({ author, content }) => addMessage(author, content))
-
+socket.on('message', ({ author, content }) => addMessage(author, content));
+socket.on('newUser',(user) => addMessage( 'ChatBot', `<i><b>${user}</b> has joined the converstaion!</i>`));
+socket.on('removeUser',(user) => addMessage('ChatBot', `<i><b>${user}</b> has left the conversation!</i>`));
 
 const loginForm = document.getElementById('welcome-form');
 const messageSection = document.getElementById('messages-section');

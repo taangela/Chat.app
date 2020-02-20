@@ -22,17 +22,24 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
   console.log('New client! Its id – ' + socket.id);
+
   socket.on('join',(user) => {
     users.push({name: user, id: socket.id});
+    socket.broadcast.emit('newUser', user);
     console.log(users);
   });
+
   socket.on('message', (message) => {
     console.log('Oh, I\'ve got something from ' + socket.id);
     messages.push(message);
     socket.broadcast.emit('message', message);
   });
+
   socket.on('disconnect', () => {
-    users = users.filter(el => el.id !== socket.id); 
+    user_to_remove = users.filter(el => el.id === socket.id)[0];
+    users = users.filter(el => el.id !== socket.id);
+     
+    socket.broadcast.emit('removeUser', user_to_remove.name);
     console.log('Oh, socket ' + socket.id + ' has left') 
     console.log(users);
 
